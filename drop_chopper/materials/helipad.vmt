@@ -1,0 +1,8 @@
+"UnlitGeneric"
+{
+	"$basetexture" "helipad"
+	"$translucent" 1
+	"$alphatest" 1
+	"$vertexcolor" 1
+	"$vertexalpha" 1
+}
