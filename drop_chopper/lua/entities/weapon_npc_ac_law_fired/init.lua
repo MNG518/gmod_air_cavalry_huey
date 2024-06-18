@@ -3,40 +3,37 @@ AddCSLuaFile( "shared.lua" )  -- and shared scripts are sent.
  
 include('shared.lua')
 
-local CollideHardSound = Sound( "Cardboard.ImpactHard" )
-local CollideSoftSound = Sound( "Cardboard.ImpactSoft" )
-function ENT:Initialize()
 
-	self:SetModel("models/weapons/w_missile.mdl")
+function ENT:Initialize()
+	self:SetModel("models/weapons/w_missile_launch.mdl")
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS ) 
 
-
-    local phys = self:GetPhysicsObject()
-	
-	phys:Wake()
-
-	phys:SetMass(25)
-	
-	
-	
 	self:SetMaterial("phoenix_storms/heli")
 	
-
-	self:GetPhysicsObject():EnableGravity(false)
-
 end
 
 
 
-function ENT:Use( activator, caller )
-    return
+
+
+function ENT:Think()
+	--Hope this fixes the rocket phys issue
+	if !self.DidPhysInit then
+		local phys = self:GetPhysicsObject()
+		if IsValid(phys) then
+			self.DidPhysInit = true
+		
+			phys:Wake()
+			phys:SetMass(25)
+			phys:EnableGravity(false)
+		end
+	end
 end
-
-
 
 function ENT:PhysicsUpdate(phys)
+
 	phys:ApplyForceCenter(self:GetAngles():Forward()*10000)
 end
 
@@ -87,7 +84,6 @@ end
 
 
 function ENT:OnTakeDamage()
-	
 	self:Explode()
 end
 
